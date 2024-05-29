@@ -8,10 +8,10 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_PORT: 5555
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: test
+          PG_HOST: 127.0.0.1
+          PG_PORT: 5555
+          PG_USER: test
+          PG_PASSWORD: test
         ports:
         - 5555:5432
     steps:
@@ -45,10 +45,10 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_PORT: 5555
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: test
+          PG_HOST: 127.0.0.1
+          PG_PORT: 5555
+          PG_USER: test
+          PG_PASSWORD: test
         ports:
         - 5555:5432
     steps:
