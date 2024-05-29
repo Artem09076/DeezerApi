@@ -3,10 +3,10 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
-from psql_app.config import BADREQUEST, NOTFOUND, engine, tags_metadata
 from psql_app.album_psql.crud import get_album_id, get_album_songs
 from psql_app.artist_psql.crud import (get_artist_album, get_artist_by_name,
                                        get_artists)
+from psql_app.config import BADREQUEST, NOTFOUND, engine, tags_metadata
 from psql_app.main import get_db, router, templates
 from psql_app.models import Base
 from psql_app.song_psql.crud import get_result, get_song

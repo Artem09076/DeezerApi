@@ -6,9 +6,9 @@ from lyricsgenius import Genius
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from psql_app.config import GENIUSTOKEN, SONGRIGHTBROAD, engine
 from db import check_exists_album_in_db, check_relation, insert_new_artist
 from discography_artist import get_album_track, get_discography
+from psql_app.config import GENIUSTOKEN, SONGRIGHTBROAD, engine
 from psql_app.models import AlbumMusicORM, AlbumORM, ArtistORM, SongORM
 
 

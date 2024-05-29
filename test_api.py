@@ -2,8 +2,8 @@
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
-from psql_app.config import BADREQUEST, NOTFOUND, OK, engine
 from main import app
+from psql_app.config import BADREQUEST, NOTFOUND, OK, engine
 from psql_app.models import AlbumORM, ArtistORM, SongORM
 
 

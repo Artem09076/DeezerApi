@@ -3,10 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session, sessionmaker
 
-from .config import NOTFOUND, engine
 from .album_psql.crud import db_create_album, delete_album, get_album_name
 from .album_psql.schemas import AlbumModel, AlbumRequestModel
 from .artist_psql import crud, schemas
+from .config import NOTFOUND, engine
 from .song_psql.crud import db_create_song, delete_song
 from .song_psql.schemas import SongAddModel, SongRequestModel
 
