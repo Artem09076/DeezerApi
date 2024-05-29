@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{song.name}} Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <nav>
+        <div class="nav-wrapper white darken-1">
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="{{ url_for('read_artists')}}" class="black-text center">Artists catalog</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="row">
+            <div class="col s12">
+                <div class="card white darken-1">
+                  <div class="card-content white-text">
+                    <span class="card-title black-text">{{song.name}}</span>
+                    <p class="grey-text"><a href="{{ url_for('read_artist_album', artist_id=artist.id) }}" class="grey-text">{{song.artist_name}}</a></p>
+                    <p class="black-text"><a href="{{song.song_link}}" class="black-text">Streaming</a></p>
+                  </div>
+                  {% if song.lyrics %}
+                  <div class="card-action black">
+                    <pre class="white-text">{{song.lyrics}}</pre>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+        </div>
+      </div>
+</body>
+</html>

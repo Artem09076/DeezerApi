@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <div class="collection">
+    {% for artist in artists %}
+            <a href="{{ url_for('read_artist_album', artist_id=artist.id) }}" class="collection-item #00897b teal-text darken-1">{{ artist.name }} realises</a>
+        {% endfor %}
+    </div>
+        <ul class="pagination">
+            {% if page > 1 %}
+            <li class="disabled"><a href="?page={{ page - 1 }}"><i class="material-icons">chevron_left</i></a></li>
+            {% else %}
+            <li class="disabled"><a><i class="material-icons">chevron_left</a></i></li>
+            {% endif %}
+            {% for num_list in range(1, count_list + 1) %}
+                {% if num_list == page %}
+                <li class="active #00897b teal darken-1"><a href="?page={{ num_list }}">{{ num_list }}</a></li>
+                {% else %}
+                    <li class="waves-effect"><a href="?page={{ num_list }}">{{ num_list }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if count_list > page %}
+            <li class="waves-effect"><a href="?page={{ page + 1 }}"><i class="material-icons">chevron_right</i></a></li>
+            {% else %}
+            <li class="waves-effect"><a><i class="material-icons">chevron_right</i></a></li>
+            {% endif %}
+          </ul>
+</body>
+</html>
