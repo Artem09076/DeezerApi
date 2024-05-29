@@ -1,79 +1,128 @@
+"""This module contain function get discography artist."""
 from datetime import date
 
 import requests
 
+from psql_app.config import OK
+
 
 def get_artist_id(artist_name):
-    search_url = "https://api.deezer.com/search/artist"
-    params = {"q": artist_name}
+    """Get Artist id.
 
-    response = requests.get(search_url, params=params)
-    if response.status_code == 200:
-        data = response.json()
-        if data["data"]:
-            artist_id = data["data"][0]["id"]
-            return artist_id
+    Args:
+        artist_name (_type_): artist name
+
+    Returns:
+        artist id or None
+    """
+    search_url = 'https://api.deezer.com/search/artist'
+    search_result = {'q': artist_name}
+
+    response = requests.get(search_url, params=search_result)
+    if response.status_code == OK:
+        result_data = response.json()
+        if result_data['data']:
+            return result_data['data'][0]['id']
         return None
     return None
 
 
 def get_artist_albums(artist_id):
+    """Get artist album.
+
+    Args:
+        artist_id: artist_id
+
+    Returns:
+        artist albums or None
+    """
     if artist_id:
-        albums_url = f"https://api.deezer.com/artist/{artist_id}/albums"
+        albums_url = f'https://api.deezer.com/artist/{artist_id}/albums'
         response = requests.get(albums_url)
-        if response.status_code == 200:
-            data = response.json()
-            albums = data["data"]
-            return albums
+        if response.status_code == OK:
+            result_data = response.json()
+            return result_data['data']
         return None
 
 
 def get_album_track(link_to_album: str):
+    """Get album track.
+
+    Args:
+        link_to_album (str): link to album
+
+    Returns:
+        album track or None
+    """
     response = requests.get(link_to_album)
-    data = response.json()
+    result_data = response.json()
     res = []
-    for track in data["data"]:
-        res.append((track["title"], track["link"], count_artist(track["artist"])))
+    for track in result_data['data']:
+        res.append((track['title'], track['link'], count_artist(track['artist'])))
     return res
 
 
 def get_discography(artist_name: str):
+    """Get discography.
+
+    Args:
+        artist_name (str): artist name
+
+    Returns:
+        List of information about album artist
+    """
     artist_id = get_artist_id(artist_name)
     artist_albums = get_artist_albums(artist_id)
     res = []
-    for data in artist_albums:
+    for album in artist_albums:
         try:
-            images_link = data["cover"]
+            images_link = album['cover']
         except IndexError:
             images_link = None
         try:
-            realise_date = date.fromisoformat(data["release_date"])
+            realise_date = date.fromisoformat(album['release_date'])
         except ValueError:
-            realise_date = date(int(data["release_date"]), 1, 1)
-        album_type = data["record_type"]
+            realise_date = date(int(album['release_date']), 1, 1)
+        album_type = album['record_type']
         res.append(
             (
-                data["title"],
+                album['title'],
                 album_type,
                 realise_date,
-                data["link"],
+                album['link'],
                 images_link,
-                data["tracklist"],
+                album['tracklist'],
                 [artist_name],
-                get_total_track(data["tracklist"]),
-            )
+                get_total_track(album['tracklist']),
+            ),
         )
-    return sorted(res, key=lambda x: x[2], reverse=True)
+    return sorted(res, key=lambda artist_name: artist_name[2], reverse=True)
 
 
 def get_total_track(link_to_album: str):
+    """Get total track album.
+
+    Args:
+        link_to_album (str): link to album
+
+    Returns:
+        total track
+    """
     response = requests.get(link_to_album)
-    data = response.json()
-    return data["total"]
+    search_data = response.json()
+    return search_data['total']
 
 
-def count_artist(data: dict) -> int:
-    artist_names = data["name"]
+def count_artist(res_data: dict) -> int:
+    """Count artist.
+
+    Args:
+        res_data (dict): data result
+
+    Returns:
+        list of artist
+    """
+    artist_names = res_data['name']
     if isinstance(artist_names, str):
         return [artist_names]
     res = []

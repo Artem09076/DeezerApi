@@ -1,30 +1,45 @@
+"""This module contain function for add realise."""
+from datetime import date
+
+import requests
 from lyricsgenius import Genius
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from config import GENIUSTOKEN, engine
-from db import insert_new_artist, check_relation, check_exists_album_in_db
-from discography_artist import get_discography, get_album_track
-from psql_app.models import AlbumORM, AlbumMusicORM, SongORM, ArtistORM
-from datetime import date
-import requests
-from sqlalchemy.exc import IntegrityError
+from psql_app.config import GENIUSTOKEN, SONGRIGHTBROAD, engine
+from db import check_exists_album_in_db, check_relation, insert_new_artist
+from discography_artist import get_album_track, get_discography
+from psql_app.models import AlbumMusicORM, AlbumORM, ArtistORM, SongORM
 
 
-def get_lyrics(name_song: str, artist_name: str) -> str:
+def get_lyrics(name_song: str, artist_name: str) -> str | None:
+    """Get lyrics song.
+
+    Args:
+        name_song (str): song name
+        artist_name (str): artist name
+
+    Returns:
+        str | None: lyrics song
+    """
+    genius = Genius(GENIUSTOKEN, remove_section_headers=True)
     try:
-        genius = Genius(GENIUSTOKEN, remove_section_headers=True)
         song = genius.search_song(name_song, artist_name)
     except requests.exceptions.Timeout:
-        print(f"When searched lyrics {name_song} by {artist_name} was raised timeout")
-        return
+        return None
     if song is None:
-        return
+        return None
     if artist_name not in song.artist:
-        return
-    return "\n".join(song.lyrics.split("\n")[1:-1])[:6000]
+        return None
+    return '\n'.join(song.lyrics.split('\n')[1:-1])[:SONGRIGHTBROAD]
 
 
-def realise_create(artist_name: str) -> list:
+def realise_create(artist_name: str) -> None:
+    """Create realise.
+
+    Args:
+        artist_name (str): artist name
+    """
     discography = get_discography(artist_name)
     for (
         name_realise,
@@ -37,9 +52,9 @@ def realise_create(artist_name: str) -> list:
         total_tracks,
     ) in discography:
         insert_new_artist(artist_list)
-        if type_realise == "single":
+        if type_realise == 'single':
             realise_create_for_single(
-                name_realise, realise_date, realise_link, cover_link, artist_list
+                name_realise, realise_date, realise_link, cover_link, artist_list,
             )
         else:
             realise_create_for_album(
@@ -60,10 +75,19 @@ def realise_create_for_single(
     cover_link: str,
     artist_list: list[str],
 ):
+    """Create models for singles.
 
-    artists = artist_list[1] if len(artist_list) >= 2 else artist_list[0]
+    Args:
+        name_realise (str): realise name
+        realise_date (date): date realise
+        realise_link (str): realise ink
+        cover_link (str): cover link
+        artist_list (list[str]): list artist
+    """
+    main_artist = artist_list[0]
+    artists = artist_list[1] if len(artist_list) >= 2 else main_artist
     rel = check_relation(
-        name_realise, name_realise, artist_name=artists, main_artist=artist_list[0]
+        name_realise, name_realise, artist_name=artists, main_artist=main_artist,
     )
     if not rel:
         return
@@ -71,15 +95,15 @@ def realise_create_for_single(
         song = SongORM(
             name=name_realise,
             artist_name=artists,
-            main_artist_name=artist_list[0],
+            main_artist_name=main_artist,
             song_link=realise_link,
-            lyrics=get_lyrics(name_realise, artist_list[0]),
+            lyrics=get_lyrics(name_realise, main_artist),
         )
 
         album = AlbumORM(
             name=name_realise,
             artist_name=artists,
-            main_artist_name=artist_list[0],
+            main_artist_name=main_artist,
             num_song=1,
             cover_link=cover_link,
             album_link=realise_link,
@@ -88,16 +112,14 @@ def realise_create_for_single(
         session.add_all([song, album])
         try:
             session.commit()
-            session.refresh(song)
-            session.refresh(album)
         except IntegrityError:
-            print(f"Can`t add song {song.name}")
             session.rollback()
             return
-
+        session.refresh(song)
+        session.refresh(album)
         album_music = AlbumMusicORM(
             artist_name=artists,
-            main_artist=artist_list[0],
+            main_artist=main_artist,
             album_name=album.name,
             song_name=song.name,
         )
@@ -114,11 +136,22 @@ def realise_create_for_album(
     artist_list: list[str],
     total_tracks: int,
 ):
+    """Create models for albums.
+
+    Args:
+        name_realise (str): realise name
+        realise_date (date): date realise
+        cover_link (str): cover link
+        realise_link (str): realise link
+        api_link (str): link for album track
+        artist_list (list[str]): artist list
+        total_tracks (int): total tracks
+    """
     artist_name = artist_list[1] if len(artist_list) >= 2 else artist_list[0]
     main_artist_name = artist_list[0]
     if not check_exists_album_in_db(
         album_name=name_realise,
-        album_main_artist_name=main_artist_name,
+        main_artist_name=main_artist_name,
         artist_name=artist_name,
     ):
         return
@@ -161,7 +194,6 @@ def realise_create_for_album(
                     session.commit()
                 except IntegrityError:
                     session.rollback()
-                    print(f"We can`t add {song_name}")
                     continue
                 inserted_song = (
                     session.query(SongORM)
@@ -187,6 +219,7 @@ def realise_create_for_album(
 
 
 def create_null_album_artist():
+    """Create realise for whose non have any albums."""
     with Session(engine) as session:
         artists = session.query(ArtistORM).all()
         for artist in artists:
@@ -195,5 +228,3 @@ def create_null_album_artist():
             )
             if not albums:
                 realise_create(artist.name)
-
-
