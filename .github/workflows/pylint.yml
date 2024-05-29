@@ -62,5 +62,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8==3.9.0 wemake-python-styleguide==0.15.3 bandit==1.7.2
         pip install -r requirements.txt
+      env:
+          PG_HOST: 127.0.0.1
+          PG_PORT: 5555
+          PG_USER: test
+          PG_PASSWORD: test
+          PG_DB: testdb
     - name: Run tests
       run: pytest test_api.py
