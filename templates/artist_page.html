@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <h1>{{artist_info[1]}}</h1>
+    <embed src="{{artist_info[2]}}">
+    <div class="collection">
+    {% for artist_track in artist_tracks %}
+            <a href="{{url_for('read_track', track_id=artist_track[0])}}" class="collection-item #00897b teal-text darken-1">{{ artist_track[1] }}</a>
+        {% endfor %}
+
+</body>
+</html>

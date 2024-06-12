@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
+    <h1>{{album_info[1]}}</h1>
+    <embed src="{{album_info[2]}}">
     <div class="collection">
-        {% for song in songs %}
-            <a href="{{ url_for('read_song', song_id=song.id) }}" class="collection-item #00897b teal-text darken-1">{{i}} {{ song.name }}</a>
+        {% for album_track in album_tracks %}
+            <a href="{{ url_for('read_track', track_id=album_track[0]) }}" class="collection-item #00897b teal-text darken-1"> {{ album_track[1] }}</a>
         {% endfor %}
         </div>
 </body>
