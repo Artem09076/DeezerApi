@@ -3,16 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ album_info[1] }} - Album Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .album-container {
+            margin-top: 20px;
+        }
+        .album-image {
+            width: 100%;
+            height: auto;
+        }
+        .track-list {
+            margin-top: 40px;
+        }
+        .track-item {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>{{album_info[1]}}</h1>
-    <embed src="{{album_info[2]}}">
-    <div class="collection">
-        {% for album_track in album_tracks %}
-            <a href="{{ url_for('read_track', track_id=album_track[0]) }}" class="collection-item #00897b teal-text darken-1"> {{ album_track[1] }}</a>
-        {% endfor %}
+    <div class="container album-container">
+        <h1 class="teal-text">{{ album_info[1] }}</h1>
+        <div class="album-image">
+            <embed src="{{ album_info[2] }}" type="image/jpeg">
         </div>
+        <div class="collection track-list">
+            <h5>Tracks</h5>
+            {% for album_track in album_tracks %}
+            <a href="{{ url_for('read_track', track_id=album_track[0]) }}" class="collection-item #00897b teal-text darken-1 track-item">
+                {{ album_track[1] }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <a href="{{url_for('read_root')}}">Back to search</a>
+    </div>
 </body>
 </html>

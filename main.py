@@ -24,19 +24,6 @@ async def read_root(request: Request):
     return templates.TemplateResponse(request=request, name='home_page.html')
 
 
-@app.get('/search/', response_class=HTMLResponse, tags=['Templates'])
-async def read_serch_page(request: Request):
-    """Read serch page.
-
-    Args:
-        request (Request): request
-
-    Returns:
-        Template Response with search page
-    """
-    return templates.TemplateResponse(request=request, name='search_page.html')
-
-
 @app.get('/results/', tags=['Templates'])
 async def read_results(
     request: Request, search_query: str,

@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .search-container {
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-      <div class="section no-pad-bot" id="index-banner">
-        <div class="container">
-          <br><br>
-          <h1 class="header center #00897b teal-text darken-1">Hi my friend, here you could see all tracks, but thanks to Spotify you can take a certain number of tracks, albums and artists(but deezer replace him ))))</h1>
-          <div class="row center">
-            <a href="{{ url_for('read_serch_page')}}" id="download-button" class="btn-large waves-effect waves-light teal">Search</a>
-          </div>
-          <br><br>
-    
+    <script>
+        function search() {
+            var query = document.getElementById("searchBox").value;
+            window.location.href = "/results?search_query=" + encodeURIComponent(query);
+        }
+    </script>
+    <div class="container">
+        <div class="row search-container center-align">
+            <div class="input-field col s12">
+                <input id="searchBox" type="text" class="validate">
+                <label for="searchBox">Search</label>
+                <button class="btn waves-effect waves-light" onclick="search()">Search</button>
+            </div>
         </div>
-      </div>
+    </div>
 </body>
 </html>

@@ -13,12 +13,6 @@ def test_read_root():
     assert response.status_code == OK
 
 
-def test_read_search_page():
-    """Test search page."""
-    response = client.get('/search/')
-    assert response.status_code == OK
-
-
 def test_read_results_success():
     """Success test results page."""
     search_query = 'test'

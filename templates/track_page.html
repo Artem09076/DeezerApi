@@ -3,18 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{track_info[1]}} Details</title>
+    <title>{{ track_info[1] }} - Song Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .song-details {
+            margin-top: 20px;
+        }
+        .song-info {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-      <div>
-        <h1>{{track_info[1]}}</h1>
-        <embed src="{{album_info[2]}}">
-        <embed src="{{track_info[2]}}">
-        <a href="{{url_for('read_artist', artist_id=artist_info[0])}}">by {{artist_info[1]}}</a>
-      </div>
-      <a href="{{url_for('read_album', album_id=album_info[0])}}">Appears on {{album_info[1]}}</a>
+    <div class="container">
+        <h1 class="center-align">{{ track_info[1] }}</h1>
+        <div class="song-details">
+            <div class="song-info">
+                <h5>Artist: 
+                    <a href="{{ url_for('read_artist', artist_id=artist_info[0]) }}">
+                        {{ artist_info[1] }}
+                    </a>
+                </h5>
+            </div>
+            <div class="song-info">
+                <h5>Listen to the Track:</h5>
+                <embed src="{{ track_info[2] }}" type="audio/mpeg">
+            </div>
+            <div class="song-info">
+              <h5>Album: 
+                <a href="{{ url_for('read_album', album_id=album_info[0]) }}">
+                    {{ album_info[1] }}
+                </a>
+              </h5>
+                <h5>Listen to the Album:</h5>
+                <embed src="{{ album_info[2] }}">
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -3,24 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results</title>
+    <title>Search Results</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .result-section {
+            margin-top: 20px;
+        }
+        .result-item {
+            margin-bottom: 20px;
+        }
+        .result-image {
+            height: auto;
+        }
+    </style>
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <div class="collection">
-        {% for  album in result['albums'] %}
-        <a href="{{ url_for('read_album', album_id=album[0])}}" class="collection-item #00897b teal-text darken-1">{{album[1]}}</a>
-        <embed src="https://api.deezer.com/album/{{album[0]}}/image">
-        {% endfor %}
-        {% for track in result['tracks'] %}
-        <a href="{{ url_for('read_track', track_id=track[0])}}" class="collection-item #00897b teal-text darken-1">{{track[1]}}</a>
-        {% endfor %}
-        {% for artist in result['artists'] %}
-        <a href="{{ url_for('read_artist', artist_id=artist[0]) }}" class="collection-item #00897b teal-text darken-1">{{artist[1]}}</a>
-        <embed src="https://api.deezer.com/artist/{{artist[0]}}/image">
-        {% endfor %}
+    <div class="container">
+        <h1 class="teal-text">Search Results</h1>
+        <div class="collection result-section">
+            <h5>Albums</h5>
+            {% for album in result['albums'] %}
+            <div class="result-item">
+                <a href="{{ url_for('read_album', album_id=album[0]) }}" class="collection-item #00897b teal-text darken-1">
+                    {{ album[1] }}
+                </a>
+                <img src="https://api.deezer.com/album/{{ album[0] }}/image" alt="{{ album[1] }}" class="result-image">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="collection result-section">
+            <h5>Tracks</h5>
+            {% for track in result['tracks'] %}
+            <div class="result-item">
+                <a href="{{ url_for('read_track', track_id=track[0]) }}" class="collection-item #00897b teal-text darken-1">
+                    {{ track[1] }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="collection result-section">
+            <h5>Artists</h5>
+            {% for artist in result['artists'] %}
+            <div class="result-item">
+                <a href="{{ url_for('read_artist', artist_id=artist[0]) }}" class="collection-item #00897b teal-text darken-1">
+                    {{ artist[1] }}
+                </a>
+                <img src="https://api.deezer.com/artist/{{ artist[0] }}/image" alt="{{ artist[1] }}" class="result-image">
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>
