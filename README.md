@@ -1,4 +1,4 @@
-# FastAPI Music App
+# Deezer  Api
 
 ## Описание
 FastAPI Music App - это веб-приложение для поиска и отображения информации о музыке, включая альбомы, треки и исполнителей. Оно использует FastAPI для создания API и Materialize CSS для стилизации фронтенда.
@@ -20,3 +20,4 @@ FastAPI Music App - это веб-приложение для поиска и о
    ```bash
    git clone https://github.com/yourusername/fastapi-music-app.git
    cd fastapi-music-app
+   pip install -r requirements.txt
